@@ -2,18 +2,86 @@
 <html lang="es" xmlns:th="http://thymeleaf.org">
 <head>
 <div th:replace="layout/layout :: estilos"></div>
-
+ 
 </head>
 <body>
 	<div class="box">
-		<div th:replace="layout/layout :: header"></div>
-		<div class="uabc-content">
-			<p>Hola MUNDO</p>
+		<div th:replace="layout/layout :: header" ></div>
 
-		</div>
+
+		<style>
+			.contenedor-tarjetas{
+				text-align: center;
+			}
+			.tarjeta-pelicula{
+				margin: 8px;
+				width: 320px;
+				border: 1px solid lightgray;
+				border-radius: 18px;
+				overflow: hidden;
+				display: inline-block;
+			}
+			.img-card-top{
+				height: 360px;
+				width: 100%;
+				object-fit: cover;
+			}
+			.card-title{
+				font-weight: bold;
+				font-size:18px;
+				text-align: center;
+			}
+			.col-genero{
+				text-align: left;
+			}
+			.col-reparto{
+				text-align: left;
+			}
+
+			
+		</style>
+		<div class="uabc-content" style=" padding-left: 3%; padding-right: 3%;">
+
+
+			<div class="contenedor-tarjetas">
+
+				<div class="tarjeta-pelicula" th:each="film: ${films}">
+					<img src="https://printworks-manchester.com/cinema-poster/images/film-poster-placeholder.png" class="img-card-top" alt="">
+					<div class="card-body">
+						<p class="card-title" th:text=${film.title}></p> <hr>
+						<div class="row">
+							<div class="col-4" ><b>Genero</b></div>
+							<div class="col-8 col-genero" ></div>
+						</div>
+
+						<hr>
+						<div class="row">
+							<div class="col-4"><b>Reparto</b></div>
+							<div class="col-8 col-reparto" >Actor 1, Actor 2</div>
+						</div>
+
+						<hr>
+						<div class="row">
+							<div class="col-4"><b>Copias</b></div>
+							<div class="col-4">99</div>
+							<div class="col-4"><button class="btn btn-success">Exito</button></div>
+						</div>
+					</div>
+				</div>
+
+			</div>
+
+			<!-- <div >
+				<p  th:each="film: ${films}" th:text=${film.title} ></p>
+				
+			</div> -->
+
+			
+
+		
 	</div>
 	<div th:replace="layout/layout :: footer"></div>
 	<div th:replace="layout/layout :: scripts"></div>
-
+</div>
 </body>
 </html>
