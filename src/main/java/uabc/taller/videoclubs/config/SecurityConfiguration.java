@@ -12,28 +12,30 @@ import uabc.taller.videoclubs.servicios.UserService;
 
 @Configuration
 public class SecurityConfiguration {
-
-	@Autowired
-	private BCryptPasswordEncoder passwordEncoder;
 	
 	@Autowired
 	private UserService userService;
 	
+	@Autowired
+	private BCryptPasswordEncoder passwordEncoder ;
+	
 	@Bean
 	public SecurityFilterChain filterChain (HttpSecurity http) throws Exception {
-		http.csrf().disable().authorizeRequests().antMatchers("/","/assets/**").permitAll().anyRequest().authenticated()
-		.and().formLogin().loginPage("/login").defaultSuccessUrl("/",true).permitAll().and().logout();
+		http.csrf().disable()
+			.authorizeRequests().antMatchers("/","/assets/**").permitAll()
+			.anyRequest().authenticated()
+			.and()
+			.formLogin().loginPage("/login").defaultSuccessUrl("/",true).permitAll()
+			.and()
+			.logout().permitAll();
 		
 		return http.build();
-		
 	}
 	
 	@Autowired
-	public void configureGlobal (AuthenticationManagerBuilder build) throws Exception {
+	public void configureGlobal (AuthenticationManagerBuilder build ) throws Exception {
 		build.userDetailsService(userService).passwordEncoder(passwordEncoder);
+		
 	}
-	
+
 }
-
-	
-

@@ -1,7 +1,6 @@
 package uabc.taller.videoclubs.entidades;
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -12,23 +11,22 @@ import javax.persistence.*;
 @AllArgsConstructor
 @Data
 @Entity
-@Builder
-@Table(name = "actor")
-public class Actor {
-
+@Table(name = "city")
+public class City {
+    //Declaracion de variables
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "actor_id")
-    private Integer actorId;
+    @Column(name = "city_id")
+    private Integer cityId;
 
-    @Column(name = "first_name")
-    private String firstName;
+    @Column(name = "city")
+    private String name;
 
-    @Column(name = "last_name")
-    private String lastName;
+    @ManyToOne
+    @JoinColumn(name = "country_id")
+    private Country country;
 
     @DateTimeFormat(pattern = "MM/dd/yyyy")
-    @Column(name = "last_update", nullable = false)
+    @Column(name = "last_update")
     private java.sql.Timestamp lastUpdate;
-
 }

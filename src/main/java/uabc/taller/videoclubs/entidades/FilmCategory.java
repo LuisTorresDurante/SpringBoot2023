@@ -12,13 +12,13 @@ import javax.persistence.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-@Builder
 @Entity
-@Table(name = "film_actor")
-public class FilmActor {
+@Builder
+@Table(name = "film_category")
+public class FilmCategory {
 
     @EmbeddedId
-    private FilmActorId id;
+    private FilmCategoryId id;
 
     @ManyToOne
     @MapsId("filmId")
@@ -26,18 +26,18 @@ public class FilmActor {
     private Film film;
 
     @ManyToOne
-    @MapsId("actorId")
-    @JoinColumn(name = "actor_id")
-    private Actor actor;
+    @MapsId("categoryId")
+    @JoinColumn(name = "category_id")
+    private Category category;
 
     @UpdateTimestamp
     @DateTimeFormat(pattern = "MM/dd/yyyy")
     @Column(name = "last_update")
     private java.sql.Timestamp lastUpdate;
 
-    public FilmActor(Film film, Actor actor) {
-        this.id = new FilmActorId(film.getFilmId(), actor.getActorId());
+    public FilmCategory(Film film, Category category) {
+        this.id = new FilmCategoryId(film.getFilmId(), category.getId());
         this.film = film;
-        this.actor = actor;
+        this.category = category;
     }
 }

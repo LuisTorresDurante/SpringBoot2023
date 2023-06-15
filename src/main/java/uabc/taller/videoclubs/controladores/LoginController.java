@@ -10,17 +10,17 @@ import org.springframework.web.bind.annotation.RequestParam;
 import uabc.taller.videoclubs.entidades.Staff;
 
 @Controller
-public class LogicController {
+public class LoginController {
+
 	@GetMapping("/login")
-	public String login (@RequestParam(value = "error", required = false) String error
-			,Model model
-			,Principal principal) {
-	
-	model.addAttribute("usuario", new Staff());
-	
-		if(error != null) {
-			model.addAttribute("usuario", "Nombre de usuario o contraseña incorrecta");
+	public String login(@RequestParam(value = "error", required = false) String error, Model model,
+			Principal principal) {
+		model.addAttribute("usuario", new Staff());
+
+		if (error != null) {
+			model.addAttribute("error", "Nombre de usuario o contraseña incorrecta");
 		}
 		return "views/login/login";
 	}
+
 }

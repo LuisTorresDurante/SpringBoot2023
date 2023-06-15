@@ -13,30 +13,34 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import uabc.taller.videoclubs.entidades.Staff;
 import uabc.taller.videoclubs.repositorios.StaffRepository;
 
 @Service
-public class UserService implements UserDetailsService{
-	
+public class UserService implements UserDetailsService {
+	//import org.slf4j.Logger;
 	private final Logger logger = LoggerFactory.getLogger(UserService.class);
 	@Autowired
-	private StaffRepository staffRepository;	
-
+	private StaffRepository staffRepository;
+	
 	@Override
-	@org.springframework.transaction.annotation.Transactional(readOnly = true)
+	@Transactional(readOnly = true)
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		Staff usuario = staffRepository.findByUsername(username);
-		if(usuario == null) {
-			logger.error("Error en el login: No existe el usuario: {} en el sistema", username);
-			throw new UsernameNotFoundException("usuario: '"+username+"' no existe en el sistema");		 	 
-		}
-		List<GrantedAuthority> roles = new ArrayList<>();
-		roles.add(new SimpleGrantedAuthority("Empleado"));
-			
-		return new User(usuario.getUsername(), usuario.getPassword(), roles);
+		Staff usuario = staffRepository.findByUsername (username);
 		
+		if (usuario ==null) {
+			logger.error("Error en el login: No existe el usuario: {} en el sistema",username);
+			throw new UsernameNotFoundException("usuario: '" +username+ "' "
+					+ "no existe en el sistema");
+		}
+			List<GrantedAuthority> roles = new ArrayList<>();
+//			import org.springframework.security.core.userdetails.User;
+			roles.add(new SimpleGrantedAuthority("EMPLEADO"));
+		return new User(usuario.getUsername(),usuario.getPassword(),roles);
 	}
+	
+	
 
 }

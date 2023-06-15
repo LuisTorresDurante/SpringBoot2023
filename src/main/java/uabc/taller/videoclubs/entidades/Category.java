@@ -7,28 +7,29 @@ import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import java.util.List;
 
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
 @Entity
 @Builder
-@Table(name = "actor")
-public class Actor {
+@Table(name = "category")
+public class Category {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "actor_id")
-    private Integer actorId;
+    @Column(name = "category_id")
+    private Integer id;
 
-    @Column(name = "first_name")
-    private String firstName;
+    private String name;
 
-    @Column(name = "last_name")
-    private String lastName;
-
+    @NotNull
     @DateTimeFormat(pattern = "MM/dd/yyyy")
-    @Column(name = "last_update", nullable = false)
+    @Column(name = "last_update")
     private java.sql.Timestamp lastUpdate;
 
+    @OneToMany(mappedBy = "category")
+    private List<FilmCategory> filmCategories;
 }
