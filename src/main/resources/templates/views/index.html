@@ -45,30 +45,18 @@
 
 			<div class="contenedor-tarjetas">
 
-				<div class="tarjeta-pelicula" th:each="film: ${films}">
-					<img src="https://printworks-manchester.com/cinema-poster/images/film-poster-placeholder.png" class="img-card-top" alt="">
-					<div class="card-body">
-						<p class="card-title" th:text=${film.title}></p> <hr>
-						<div class="row">
-							<div class="col-4" ><b>Genero</b></div>
-							<div class="col-8 col-genero" ></div>
-						</div>
+				<div class="d-container" id="gridContainer">
+					<div class="d-flex flex-wrap" id="mosaicoPeliculas" style="justify-content: center;">
+						
 
-						<hr>
-						<div class="row">
-							<div class="col-4"><b>Reparto</b></div>
-							<div class="col-8 col-reparto" >Actor 1, Actor 2</div>
-						</div>
-
-						<hr>
-						<div class="row">
-							<div class="col-4"><b>Copias</b></div>
-							<div class="col-4">99</div>
-							<div class="col-4"><button class="btn btn-success">Exito</button></div>
-						</div>
 					</div>
 				</div>
 
+				<nav aria-label="Pagination">
+					<div class="pagination justify-content-center dataTables_wrapper" id="paginationContainer">
+
+					</div>
+				</nav>
 			</div>
 
 			<!-- <div >
@@ -82,6 +70,7 @@
 	</div>
 	<div th:replace="layout/layout :: footer"></div>
 	<div th:replace="layout/layout :: scripts"></div>
+	<script th:src="@{assets/js/landing.js}"></script>
 </div>
 </body>
 </html>

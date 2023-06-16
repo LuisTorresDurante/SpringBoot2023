@@ -17,7 +17,6 @@ public class IndexController {
 	
 	@GetMapping("/")
 	public String index(Model modelo) {
-		modelo.addAttribute("films", filmService.findAllFirst10());
 		return "views/index";
 	}
 }
