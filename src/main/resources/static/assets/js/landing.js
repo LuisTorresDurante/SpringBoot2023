@@ -1,11 +1,37 @@
 const input = document.querySelector('#buscadorPeliculas');
 
 document.querySelectorAll('.btnDetalle').forEach(item => {
-	
+	item.addEventListener('click', function() {
+		let url = "../films/";
+		fetch(url + this.id).then(i=>i.json()).then(i=>{
+			cargarModalDetalle(i);
+		});
+	});
 });
 
 const cargarModalDetalle = (pelicula) => {
+	document.getElementById("det_title").textContent = pelicula.title;
+	
+	document.getElementById("det_language").textContent = pelicula.language.name.trim();
+	document.getElementById("det_rating").textContent = pelicula.rating;
+	document.getElementById("det_length").textContent = pelicula.length + " min";
+	
+	var array = [];
+	pelicula.filmCategories.forEach(filmCategory => array.push(filmCategory.category.name));
+	document.getElementById("det_category").textContent = array.join(", ");
+	
+	array = [];
+	pelicula.filmActors.forEach(filmActor => array.push(primeraLetraMayuscula(filmActor.actor.name)));
+	document.getElementById("det_reparto").textContent = array.join(", ")
+	
+	document.getElementById("det_description").textContent = pelicula.description;
+	document.getElementById("det_rentalRate").textContent = "$" + pelicula.rentalRate;
 
+	let img = document.getElementById("det_poster");
+	img.src = `../films/poster/${pelicula.filmId}`
+    		img.onerror = function() {
+                this.src = "https://imagenes.elpais.com/resizer/n48DlQR-crZegLmg09HVeig_Qf0=/414x0/filters:focal(1133x620:1143x630)/cloudfront-eu-central-1.images.arcpublishing.com/prisa/ZZIDTAAXOZEQXPZ2BP3VGO7KIY.jpg";
+           };
 
 };
 
@@ -194,8 +220,8 @@ function renderPagination(pageNumber, totalPages) {
 }
 
 function buscarPeliculas (page = 0) {
-	fetch("films/buscar?" + new URLSearchParams({
-		texto: "", page: page
+	fetch("../films/buscar?" + new URLSearchParams({
+	    texto: input.value, page: page,
 	})).then(i=>i.json()).then(i=>{
 		recargarMosaico(i);
 		renderPagination(i.page, i.totalPages);
@@ -203,10 +229,10 @@ function buscarPeliculas (page = 0) {
 };
 
 function buscar () {
-	buscarPeliculas
+	buscarPeliculas();
 };
 
-//input.addEventListener('blur', buscar);
+input.addEventListener('blur', buscar);
 
 function primeraLetraMayuscula(oracion) {
 	const arr = oracion.toLowerCase().split(" ");

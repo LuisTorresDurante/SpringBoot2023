@@ -10,11 +10,6 @@ import uabc.taller.videoclubs.servicios.IFilmService;
 @Controller
 public class IndexController {
 
-	@Autowired
-	private IFilmService filmService;
-	
-	
-	
 	@GetMapping("/")
 	public String index(Model modelo) {
 		return "views/index";

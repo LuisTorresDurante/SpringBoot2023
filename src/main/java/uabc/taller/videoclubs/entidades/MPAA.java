@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @AllArgsConstructor
+@Getter
 public enum MPAA {
     G("G"),
     PG("PG"),
@@ -14,17 +15,9 @@ public enum MPAA {
 
     @JsonValue
     private String mpaa;
-    
+
     @Override
     public String toString() {
         return this.mpaa;
     }
-
-	public String getMpaa() {
-		return mpaa;
-	}
-
-	public void setMpaa(String mpaa) {
-		this.mpaa = mpaa;
-	}
 }

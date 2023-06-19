@@ -39,8 +39,6 @@ public class Customer {
 	private int customerId;
 
 	// relacion
-	// @Column(name = "store_id")
-	// private Integer storeId;
 	@JsonBackReference
 	@ManyToOne
 	@JoinColumn(name = "store_id")
@@ -56,8 +54,6 @@ public class Customer {
 	private String email;
 
 	// relacion
-	// @Column(name = "address_id")
-	// private Integer addressId;
 	@JsonBackReference
 	@ManyToOne
 	@JoinColumn(name = "address_id")
@@ -66,7 +62,7 @@ public class Customer {
 	@Column(name = "activebool")
 	private Boolean activeBool;
 
-	@DateTimeFormat(pattern = "MM/dd/yyyy")	
+	@DateTimeFormat(pattern = "MM/dd/yyyy")
 	@Column(name = "create_date")
 	private Date createDate;
 
@@ -86,14 +82,14 @@ public class Customer {
 		super();
 		this.customerId = customerId;
 	}
-	
+
 	@Transient
 	private Integer idCiudad;
-	
+
 	@Transient
 	private Integer idTienda;
-	
+
 	@Column(name = "active")
 	private Integer active;
-	
+
 }

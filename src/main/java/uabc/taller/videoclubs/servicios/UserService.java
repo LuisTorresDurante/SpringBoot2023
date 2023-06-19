@@ -20,26 +20,39 @@ import uabc.taller.videoclubs.repositorios.StaffRepository;
 
 @Service
 public class UserService implements UserDetailsService {
-	//import org.slf4j.Logger;
-	private final Logger logger = LoggerFactory.getLogger(UserService.class);
-	@Autowired
-	private StaffRepository staffRepository;
-	
-	@Override
-	@Transactional(readOnly = true)
-	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		Staff usuario = staffRepository.findByUsername (username);
-		
-		if (usuario ==null) {
-			logger.error("Error en el login: No existe el usuario: {} en el sistema",username);
-			throw new UsernameNotFoundException("usuario: '" +username+ "' "
-					+ "no existe en el sistema");
-		}
-			List<GrantedAuthority> roles = new ArrayList<>();
-//			import org.springframework.security.core.userdetails.User;
-			roles.add(new SimpleGrantedAuthority("EMPLEADO"));
-		return new User(usuario.getUsername(),usuario.getPassword(),roles);
-	}
+	 private final Logger logger = LoggerFactory.getLogger(UserService.class);
+	    @Autowired
+	    private StaffRepository staffRepository;
+
+	    @Override
+	    @Transactional(readOnly = true)
+	    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+	        Staff usuario = staffRepository.findByUsername(username);
+	        if (usuario == null) {
+	            logger.error("Error en el login: No existe el usuario: {} en el sistema", username);
+	            throw new UsernameNotFoundException("usuario: '" + username + "' no existe en el sistema");
+	        }
+	        List<GrantedAuthority> roles = new ArrayList<>();
+	        roles.add(new SimpleGrantedAuthority("EMPLEADO"));
+	        return new User(usuario.getUsername(), usuario.getPassword(), roles);
+	    }
+
+	    public Staff save(Staff staff) {
+	        return staffRepository.save(staff);
+	    }
+
+	    public String getStaffByID(Integer id) {
+	        staffRepository.findById(id);
+	        return null;
+	    }
+
+	    public String findByEmail(String email) {
+	        return staffRepository.findByEmail(email);
+	    }
+	    
+	    public Staff findByUserName(String username) {
+	        return staffRepository.findByUsername(username);
+	    }
 	
 	
 
