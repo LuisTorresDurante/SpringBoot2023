@@ -16,14 +16,16 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import uabc.taller.videoclubs.dto.FilmDetails;
 import uabc.taller.videoclubs.dto.FilmPaginationDTO;
+import uabc.taller.videoclubs.dto.FilmRegisterDTO;
 import uabc.taller.videoclubs.dto.Paginacion;
-import uabc.taller.videoclubs.dto.film_proyection.FilmP;
 import uabc.taller.videoclubs.servicios.IFilmService;
 import uabc.taller.videoclubs.util.CheckAvailability;
 
@@ -86,6 +88,13 @@ public class FilmController {
 		p.setData(result);
 		return ResponseEntity.ok(p);
 						
+	}
+	
+	@PostMapping()
+	public ResponseEntity<Boolean> agregarDatos(@RequestBody FilmRegisterDTO film){
+		boolean resultado = false;
+		resultado = filmService.save(film);
+		return ResponseEntity.ok(resultado);
 	}
 	
 	

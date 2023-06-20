@@ -6,6 +6,7 @@ import java.util.Optional;
 import uabc.taller.videoclubs.dto.CatalogoIndex;
 import uabc.taller.videoclubs.dto.FilmDetails;
 import uabc.taller.videoclubs.dto.FilmPaginationDTO;
+import uabc.taller.videoclubs.dto.FilmRegisterDTO;
 
 public interface IFilmService {
 
@@ -18,6 +19,8 @@ public interface IFilmService {
 	Optional<FilmDetails> findById(Integer id);
 
 	List<CatalogoIndex> findByOrder();
+
+	boolean save(FilmRegisterDTO film);
 
 	
 	
