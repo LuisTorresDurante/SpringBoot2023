@@ -39,15 +39,13 @@ import uabc.taller.videoclubs.repositorios.InventoryRepository;
 import uabc.taller.videoclubs.util.FilmDetailsToFilmPConverter;
 
 @Service
-public class FilmService<inventoryRepository> implements IFilmService {
+public class FilmService implements IFilmService {
 
 	@Autowired
 	private FilmRepository filmRepository;
 
 	@Autowired
 	private FilmRepositoryImpl filmRepositoryImpl;
-	
-	Logger logger = LoggerFactory.getLogger(getClass());
 	
 	@Autowired
 	private FilmActorRepository filmActorRepository;
@@ -57,6 +55,8 @@ public class FilmService<inventoryRepository> implements IFilmService {
 	
 	@Autowired
 	private InventoryRepository inventoryRepository;
+	
+	Logger logger = LoggerFactory.getLogger(getClass());
 
 	@Override
 	public Optional<byte[]> findImageById(Integer id) {
@@ -102,14 +102,14 @@ public class FilmService<inventoryRepository> implements IFilmService {
 		}
 		return Optional.empty();
 	}
-	
+
 	@Override
-	public List<CatalogoIndex> findByOrder(){
+	public List<CatalogoIndex> findByOrder() {
 		return filmRepository.obtenerPeliculas();
 	}
 
-	
-	public boolean save (FilmRegisterDTO film) {
+	@Override
+	public Boolean save(FilmRegisterDTO film) {
 		
 		Film filmE = new Film();
 		filmE.setTitle(film.getTitle());
@@ -123,36 +123,54 @@ public class FilmService<inventoryRepository> implements IFilmService {
 		filmE.setLanguage(Language.builder().languageId(film.getLanguageId()).build());
 		filmE.setOriginalLanguage(Language.builder().languageId(film.getOriginalLanguageId()).build());
 		
-		if(film.getPoster() != null
-				&& !film.getPoster().isBlank()
-				&& !film.getPoster().isEmpty()
-				) try {
-					Film saved = filmRepository.save(filmE);
-					
-					filmActorRepository.saveAll(
-							film.getActorId().stream()
-							.map(i-> new FilmActor(saved, Actor.builder()
+		if(film.getPoster() != null 
+				&& !film.getPoster().isBlank() 
+				&& !film.getPoster().isEmpty()) {
+			filmE.setImage(film.getPoster());
+		}
+		
+		try {
+			Film saved = filmRepository.save(filmE);
+			
+			filmActorRepository.saveAll(film.getActorId().stream()
+					.map(i -> new FilmActor(saved, Actor.builder()
 							.actorId(i).build()))
-							.collect(Collectors.toList()));
-					
-					filmCategoryRepository.saveAll(
-							film.getCategoryId().stream()
-							.map(i-> new FilmCategory(saved, Category.builder()
+					.collect(Collectors.toList()));
+			
+			filmCategoryRepository.saveAll(film.getCategoryId().stream()
+					.map(i -> new FilmCategory(saved, Category.builder()
 							.id(i).build()))
-							.collect(Collectors.toList()));
-					
-					film.getInventory().forEach((key, value)-> inventoryRepository
+					.collect(Collectors.toList()));
+			
+			
+			film.getInventory().forEach((key, value) -> inventoryRepository
 					.saveAll(Stream.generate(() -> Inventory.builder()
 							.film(saved)
-							.store(Store.builder().storeId(key).build()).build())
-							.limit(value).collect(Collectors.toList())));
-					
-					return true;
-				}catch(Exception e){
-					logger.error(e.getMessage());
-					return false;
-				}
-		return false;
+					.store(Store.builder().storeId(key).build()).build())
+					.limit(value).collect(Collectors.toList())));
+			
+			return Boolean.TRUE;
+			
+			
+		}catch(Exception e) {
+			logger.error(e.getMessage());
+			return Boolean.FALSE;
+		}
+		
+		
+		
+		
 		
 	}
+		
+		
+	
+	
+	
+	
+	
+	
+	
+	
+	
 }

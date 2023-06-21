@@ -23,9 +23,10 @@ public class SecurityConfiguration {
 
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-		http.csrf().disable().authorizeRequests().antMatchers("/", "/films/poster/{id}", "/films/buscar", "/films/{filmId}", "/assets/**")
-				.permitAll().anyRequest().authenticated().and().formLogin().loginPage("/login")
-				.defaultSuccessUrl("/", true).permitAll().and().logout().permitAll();
+		http.csrf().disable().authorizeRequests()
+				.antMatchers("/", "/films/poster/{id}", "/films/buscar", "/films/{filmId}", "/assets/**").permitAll()
+				.anyRequest().authenticated().and().formLogin().loginPage("/login").defaultSuccessUrl("/", true)
+				.permitAll().and().logout().permitAll();
 
 		return http.build();
 	}

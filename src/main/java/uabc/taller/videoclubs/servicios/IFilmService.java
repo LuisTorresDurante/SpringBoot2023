@@ -19,9 +19,7 @@ public interface IFilmService {
 	Optional<FilmDetails> findById(Integer id);
 
 	List<CatalogoIndex> findByOrder();
-
-	boolean save(FilmRegisterDTO film);
-
 	
-	
+	Boolean save(FilmRegisterDTO film);
+
 }

@@ -27,8 +27,7 @@ public class CustomerService implements ICustomerService {
 
     @Override
     public Paginacion getCustomers(DataTable dataTable) {
-
-        // sort
+     // sort
         Sort.Direction sortDir = dataTable.getOrder().get(0).getOrDefault("dir", "asc").equals("asc") ? Sort.Direction.ASC : Sort.Direction.DESC;
         String[] sortBy = dataTable.getOrder().stream()
                 .map(i -> i.get("column"))

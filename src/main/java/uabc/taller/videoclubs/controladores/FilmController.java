@@ -59,7 +59,8 @@ public class FilmController {
 
 	@GetMapping("buscar")
 	@ResponseBody
-	public ResponseEntity<FilmPaginationDTO> buscadorPeliculas(@RequestParam("texto") String texto,
+	public ResponseEntity<FilmPaginationDTO> buscadorPeliculas(
+			@RequestParam("texto") String texto,
 			@RequestParam(value = "page", defaultValue = "0") Integer page) {
 		try {
 			FilmPaginationDTO data = filmService.buscadorPeliculas(texto, page);
@@ -69,33 +70,35 @@ public class FilmController {
 		}
 		return ResponseEntity.internalServerError().build();
 	}
-	
+
 	@GetMapping()
-	public String films(Model modelo) {
-		return "/views/film/films";
+	public String index(Model modelo) {
+		return "views/film/films";
 	}
-	
+
 	@GetMapping("list")
-	public ResponseEntity<Paginacion> lista(){
-		
+	public ResponseEntity<Paginacion> lista() {
+
 		List<List<String>> result = filmService.findByOrder().stream()
-				.map(i-> List.of(CheckAvailability.check(i.getTitle()),
+				.map(i -> List.of(CheckAvailability.check(i.getTitle()), 
 						CheckAvailability.check(i.getCategory()),
-						CheckAvailability.check(i.getCopies()),
-						CheckAvailability.check(i.getFilmId()))).collect(Collectors.toList());
-		
+						CheckAvailability.check(i.getCopies()), 
+						CheckAvailability.check(i.getFilmId())))
+				.collect(Collectors.toList());
+
 		Paginacion p = new Paginacion();
 		p.setData(result);
 		return ResponseEntity.ok(p);
-						
 	}
-	
 	@PostMapping()
-	public ResponseEntity<Boolean> agregarDatos(@RequestBody FilmRegisterDTO film){
-		boolean resultado = false;
-		resultado = filmService.save(film);
+	public ResponseEntity<Boolean> agregar(@RequestBody FilmRegisterDTO film){
+		Boolean resultado = false;
+		
+		try {
+			resultado = filmService.save(film);
+		}catch(Exception e) {}
+		
+		
 		return ResponseEntity.ok(resultado);
 	}
-	
-	
 }

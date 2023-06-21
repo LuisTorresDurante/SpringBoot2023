@@ -10,25 +10,27 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import uabc.taller.videoclubs.dto.Select2.Select2Result;
-import uabc.taller.videoclubs.servicios.StoreService;
+import uabc.taller.videoclubs.servicios.ICategoryService;
 
 @Controller
-@RequestMapping("store")
-public class StoreController {	
-	@Autowired
-	private StoreService  store;
+@RequestMapping("category")
+public class CategoryController {
 
+	@Autowired
+	private ICategoryService category;
+	
 	Logger logger = LoggerFactory.getLogger(getClass());
 	
 	@GetMapping("select")
 	public ResponseEntity<Select2Result> listar(@Param("search") String search){
 			
 			try {
-				Select2Result select = store.select2();
+				Select2Result select = category.select2(search);
 				return ResponseEntity.ok(select);
 			}catch(Exception e) {
 				logger.error(e.getMessage());
-			}			
+			}
+			
 			return ResponseEntity.internalServerError().build();
 		}
 }

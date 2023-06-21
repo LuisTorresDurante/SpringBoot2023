@@ -22,16 +22,12 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import uabc.taller.videoclubs.dto.DataTable;
 import uabc.taller.videoclubs.dto.Paginacion;
-import uabc.taller.videoclubs.entidades.Address;
 import uabc.taller.videoclubs.entidades.City;
 import uabc.taller.videoclubs.entidades.Customer;
-import uabc.taller.videoclubs.entidades.Store;
 import uabc.taller.videoclubs.servicios.AddressService;
 import uabc.taller.videoclubs.servicios.CityService;
 import uabc.taller.videoclubs.servicios.CountryService;
@@ -70,7 +66,7 @@ public class CustomerController {
 		model.addAttribute("countries", countryService.findAll());
 		model.addAttribute("sucursal", storeService.findAll());
 		model.addAttribute("customer", new Customer());
-		return "views/customers";
+		return "views/customers/customers";
 	}
 
 	@GetMapping("list")
@@ -81,11 +77,11 @@ public class CustomerController {
 		return ResponseEntity.ok(p);
 	}
 
-	@PostMapping(value = "createCustomer")
+	/*@PostMapping(value = "createCustomer")
 	public String registro(Model model, @RequestParam(name = "selectCountry") Integer country,
 			RedirectAttributes redirectAtt) {
 		return "redirect:/";
-	}
+	}*/
 
 	// @GetMapping("filtroCiudad/{countryId}")
 	// public String filtroCiudad(@PathVariable Integer countryId) {
@@ -131,11 +127,9 @@ public class CustomerController {
 
 	@PostMapping(value = "register")
 	@ResponseBody
-	public String registroCliente(@ModelAttribute(name = "customer") @Valid Customer customer,
+	public String registroCliente(
+			@ModelAttribute(name = "customer") @Valid Customer customer,
 			BindingResult bindingResult) {
-
-		Address dir = new Address();
-		Store tienda = new Store();
 
 		Date fecha = new Date();
 		Timestamp fechaStamp = new Timestamp(fecha.getTime());
@@ -145,19 +139,20 @@ public class CustomerController {
 		customer.getAddress().setCityId(customer.getIdCiudad());
 		customer.getAddress().setLastUpdate(fechaStamp);
 
-		dir = addressService.save(customer.getAddress());
-		tienda = storeService.obtenerTiendaPorId(customer.getIdTienda());
-
-		customer.setAddress(dir);
-		customer.setStore(tienda);
+		customer.setAddress(addressService.save(customer.getAddress()));
+		customer.setStore(storeService.obtenerTiendaPorId(customer.getIdTienda()));
 		customer.setActiveBool(true);
 		customer.setActive(1);
 		customer.setCreateDate(fechaSql);
 		customer.setLastUpdate(fechaStamp);
 
-		customerService.save(customer);
-
-		return "ok";
+		try {
+			customerService.save(customer);
+			return "ok";
+		} catch (Exception e) {
+			return "no OK";
+		}
+		
 	}
 
 }

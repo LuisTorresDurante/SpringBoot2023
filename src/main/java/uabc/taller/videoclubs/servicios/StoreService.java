@@ -16,20 +16,16 @@ import uabc.taller.videoclubs.repositorios.StoreRepository;
 public class StoreService implements IStoreService{
 	@Autowired
 	private StoreRepository storeRepository;
-
 	
 	@Override
 	public List<Store> findAll() {
-		
 		return storeRepository.findAll();
 	}
 	
-	@Override
 	public Store obtenerTiendaPorId(Integer id) {
 		return storeRepository.findByStoreId(id);
 	}
 	
-	@Override
 	public Select2Result select2() {
 
         List<Store> all = storeRepository.findAll();
