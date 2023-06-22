@@ -35,13 +35,13 @@ const notificaAviso = (msg)=>Lobibox.notify("info", {msg})
 
 const inputText = (name, id, value, label, disabled, placeholder, help, cls = '')=> `<div class="form-group">
 ${label ? `<label for="${id || name}">${label}</label>` : ''}
-<input type="text" class="form-control ${cls}" id="${id || name}" ${value ? `value="${value}"` : ``} ${value ? `placeholder="${placeholder}"` : ``} ${disabled ? `disabled` : ``} >
+<input type="text" class="form-control ${cls}" id="${id || name}" ${value ? `value="${value}"` : ``} ${placeholder ? `placeholder="${placeholder}"` : ``} ${disabled ? `disabled` : ``} >
 ${help ? `<small id="${id || name}Help" class="form-text text-muted">${help}</small>` : ''}
 </div>`
 
 const inputNumber = (name, id, value, label, disabled, placeholder, help, cls = '')=> `<div class="form-group">
 ${label ? `<label for="${id || name}">${label}</label>` : ''}
-<input type="number" class="form-control ${cls}" id="${id || name}" ${value ? `value="${value}"` : ``} ${value ? `placeholder="${placeholder}"` : ``} ${disabled ? `disabled` : ``} >
+<input type="number" class="form-control ${cls}" id="${id || name}" ${value ? `value="${value}"` : ``} ${placeholder ? `placeholder="${placeholder}"` : ``} ${disabled ? `disabled` : ``} >
 ${help ? `<small id="${id || name}Help" class="form-text text-muted">${help}</small>` : ''}
 </div>`
 

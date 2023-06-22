@@ -1,6 +1,6 @@
 package uabc.taller.videoclubs.controladores;
 
-import java.io.IOException;
+
 import java.security.Principal;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -108,5 +108,33 @@ public class RentalController {
             msg = "Los datos son invalidos";
         }
         return response(resultado, _nRentals, msg);
+    }
+    
+    @GetMapping("customerSearch")
+    @ResponseBody
+    public HashMap<String, Object> customerSearch(Model model, HttpServletRequest request, HttpServletResponse response) {
+    	
+    	
+    	String search = request.getParameter("search");
+    	List<CatalogoInventarioCliente> resultados = null;
+    	if(search != null) {
+    		resultados = rentalService.buscarClientes(search);
+    	}
+    	return response(true, resultados, "");
+    }
+    
+    @GetMapping("filmSearch")
+    @ResponseBody
+    public HashMap<String, Object> filmSearch(Model model, HttpServletRequest request, HttpServletResponse response) {
+    	
+    	
+    	String search = request.getParameter("search");
+    	
+    	List<CatalogoInventarioPelicula> resultados = null;
+    	if(search != null) {
+    		Principal user = request.getUserPrincipal();
+    		resultados = rentalService.buscarPeliculas(search, user.getName());
+    	}
+    	return response(true, resultados, "");
     }
 }
