@@ -15,7 +15,7 @@
 <body>
 <div th:replace="layout/layout :: header"></div>
 
-<div class="uabc-content" style="padding-right: 3%; padding-left: 3%;" id="si">
+<div class="uabc-content" style="padding-right: 3%; padding-left: 3%;">
     <div class="d-flex" id="wrapper">
         <div id="page-content-wrapper" style="width:100%;">
             <!-- Page content-->
@@ -28,6 +28,9 @@
                         <div class="btn-group" role="group">
                             <button class="btn green-btn" id="agregarRenta"><i class="fas fa-plus fa-fw"></i>
                                 Registrar
+                            </button>
+                            <button class="btn red-btn" id="devolucion">
+                            	<i class="fas fa-sign-in-alt"></i> Devoluci&oacute;n
                             </button>
                         </div>
 
@@ -150,9 +153,8 @@
 <div th:replace="layout/layout :: footer"></div>
 <div th:replace="layout/layout :: scripts"></div>
 <script th:src="@{assets/js/jquery.datetimepicker.full.js}"></script>
-<script th:src="@{assets/js/app/rental.js}" type="module"></script>
-<script th:src="@{assets/js/devolucion.js}" type="module"></script>
-
+<script th:src="@{assets/js/app/rental.js}"></script>
+<script th:src="@{assets/js/app/return.js}" type="module"></script>
 </body>
 
 </html>

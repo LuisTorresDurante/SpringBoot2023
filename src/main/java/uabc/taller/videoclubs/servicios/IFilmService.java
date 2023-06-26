@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import uabc.taller.videoclubs.dto.CatalogoIndex;
+import uabc.taller.videoclubs.dto.FilmDTO;
 import uabc.taller.videoclubs.dto.FilmDetails;
 import uabc.taller.videoclubs.dto.FilmPaginationDTO;
 import uabc.taller.videoclubs.dto.FilmRegisterDTO;

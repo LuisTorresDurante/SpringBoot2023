@@ -1,8 +1,15 @@
 package uabc.taller.videoclubs.controladores;
 
+import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,11 +29,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.itextpdf.text.DocumentException;
+
+import uabc.taller.videoclubs.dto.FilmDTO;
 import uabc.taller.videoclubs.dto.FilmDetails;
 import uabc.taller.videoclubs.dto.FilmPaginationDTO;
 import uabc.taller.videoclubs.dto.FilmRegisterDTO;
 import uabc.taller.videoclubs.dto.Paginacion;
 import uabc.taller.videoclubs.servicios.IFilmService;
+import uabc.taller.videoclubs.servicios.pdf.FilmPDFExporter;
 import uabc.taller.videoclubs.util.CheckAvailability;
 
 @Controller
@@ -101,4 +112,22 @@ public class FilmController {
 		
 		return ResponseEntity.ok(resultado);
 	}
+	
+	@GetMapping("pdf/{id}")
+    @ResponseBody
+    public void exportPDFFilm(HttpServletRequest request, HttpServletResponse response, @PathVariable Integer id) throws 	DocumentException, IOException{
+    	FilmDetails film = filmService.findById(id).get();
+    	response.setContentType("application/pdf");
+    	DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
+    	
+    	String currentDateTime = dateFormatter.format(new Date());
+    	
+    	String headerKey = "Content-Disposition";
+    	String sbHeaderValue = "attachment; filename = Film_ " + film.getFilmId() + "_" + currentDateTime + 		".pdf";
+    	response.setHeader(headerKey, sbHeaderValue);
+    	
+    	FilmPDFExporter exporter = new FilmPDFExporter(film);
+    	exporter.export(response);
+    			
+    }
 }

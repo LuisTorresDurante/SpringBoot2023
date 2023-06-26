@@ -93,11 +93,11 @@ public class CustomerService implements ICustomerService {
 		return customerRepository.findCatByCostumerId(costumerid);
 	}
 	
-    public String findByIdCustomerDetalles(Integer id) {
+    public String findByIdCustumerDetalles(Integer id) {
 		return customerRepository.findByCustomerIdDetalles(id);
 	}
 
-	public Customer findByIdCustomer(Integer id) {
+	public Customer findByIdCustumer(Integer id) {
 		return customerRepository.findByCustomerId(id);
 	}
 	

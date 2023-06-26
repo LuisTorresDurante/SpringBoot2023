@@ -1,6 +1,6 @@
 package uabc.taller.videoclubs.controladores;
 
-
+import java.io.IOException;
 import java.security.Principal;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -67,6 +67,14 @@ public class RentalController {
         List<RentalDTO> rentals = rentalService.findPendientesByUserStore(userLogged.getName());
         return response(true, rentals, "");
     }
+    
+    @RequestMapping("rentalId")
+    @ResponseBody
+    public HashMap<String, Object> consultaRental(Model model, HttpServletRequest request, HttpServletResponse response, Principal principal) {
+        Integer rentalId = Integer.parseInt(request.getParameter("rentalId"));
+        RentalDTO rental = rentalService.findByRentalId(rentalId);
+    	return response(true, rental, "");
+    }
 
     @PostMapping("registrarRenta")
     @ResponseBody
@@ -110,31 +118,52 @@ public class RentalController {
         return response(resultado, _nRentals, msg);
     }
     
+    
     @GetMapping("customerSearch")
     @ResponseBody
     public HashMap<String, Object> customerSearch(Model model, HttpServletRequest request, HttpServletResponse response) {
+        String search = request.getParameter("search");
+        List<CatalogoInventarioCliente>  resultados = null;
+        if(search != null) {
+        	resultados = rentalService.buscarClientes(search);
+        }
     	
-    	
-    	String search = request.getParameter("search");
-    	List<CatalogoInventarioCliente> resultados = null;
-    	if(search != null) {
-    		resultados = rentalService.buscarClientes(search);
-    	}
-    	return response(true, resultados, "");
+        return response(true, resultados, "");
     }
+    
     
     @GetMapping("filmSearch")
     @ResponseBody
     public HashMap<String, Object> filmSearch(Model model, HttpServletRequest request, HttpServletResponse response) {
+        String search = request.getParameter("search");
+        List<CatalogoInventarioPelicula>  resultados = null;
+        if(search != null) {
+        	Principal user =  request.getUserPrincipal();
+        	resultados = rentalService.buscarPeliculas(search,user.getName());
+        }
     	
-    	
-    	String search = request.getParameter("search");
-    	
-    	List<CatalogoInventarioPelicula> resultados = null;
-    	if(search != null) {
-    		Principal user = request.getUserPrincipal();
-    		resultados = rentalService.buscarPeliculas(search, user.getName());
-    	}
-    	return response(true, resultados, "");
+        return response(true, resultados, "");
     }
+    
+    @GetMapping("export/reciboRenta")
+    @ResponseBody
+    public void exportRentalPDF(HttpServletRequest request, HttpServletResponse response, @RequestParam Integer rentalId) throws 	DocumentException, IOException{
+    	RentalDTO rental = rentalService.findByRentalId(rentalId);
+    	response.setContentType("application/pdf");
+    	DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
+    	
+    	String currentDateTime = dateFormatter.format(new Date());
+    	
+    	String headerKey = "Content-Disposition";
+    	String sbHeaderValue = "attachment; filename = receipt_rental_ " + rental.getRentalId() + "_" + currentDateTime + 		".pdf";
+    	response.setHeader(headerKey, sbHeaderValue);
+    	
+    	RentalPDFExporter exporter = new RentalPDFExporter(rental);
+    	exporter.export(response);
+    			
+    }
+    
+    
+    
+    
 }

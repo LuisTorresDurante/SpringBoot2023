@@ -34,7 +34,7 @@ public class RentalService implements IRentalService {
     private InventoryService inventoryService;
     
     @Autowired
-    private CustomerService customerService;
+    private CustomerService costumerService;
     
     @Autowired
 	PaymentRepository paymentRepository;
@@ -95,7 +95,7 @@ public class RentalService implements IRentalService {
 			if(inventory == null)
 				return null;
 			
-			Customer customer = customerService.findByIdCustomer(renta.getCustomerId());
+			Customer customer = costumerService.findByIdCustumer(renta.getCustomerId());
 			if(customer == null)
 				return null;
 
@@ -118,13 +118,13 @@ public class RentalService implements IRentalService {
 			if(rentals.size() == 0)
 				return null;
 			
-			Customer customer = customerService.findByIdCustomer(customerId);
+			Customer customer = costumerService.findByIdCustumer(customerId);
 			if(customer == null)
 				return null;
 
 			Date hoy = new Date();
 			Timestamp now = new Timestamp(hoy.getTime());
-			List<RentalDTO> nrentals =  new ArrayList<>();
+			List<RentalDTO> nrentals =  new ArrayList();
 			for(RentalDTO r : rentals) {
 				Inventory inventory = inventoryService.findByInventoryId(r.getInventoryId());
 				Rental nrental = new Rental(now, inventory, customer, staff, now);
@@ -143,24 +143,41 @@ public class RentalService implements IRentalService {
 		String regex = "\\d+";
 		List<CatalogoInventarioCliente> resultados = null;
 		if(search.matches(regex)) {
-			resultados = customerService.findByCostumerId(Integer.parseInt(search));
+			//ingreso un numero de cliente
+			resultados = costumerService.findByCostumerId(Integer.parseInt(search));
 		}else {
-			resultados = customerService.filtrarClientePorNombreApellidoEmail(search);
+			//ingreso el nombre del cliente
+			resultados = costumerService.filtrarClientePorNombreApellidoEmail(search);
 		}
 		return resultados;
 	}
-
 	
-
-	public List<CatalogoInventarioPelicula> buscarPeliculas(String search, String usuario) {
+	public List<CatalogoInventarioPelicula> buscarPeliculas(String search, String usuario){
 		String regex = "\\d+";
 		List<CatalogoInventarioPelicula> resultados = null;
 		if(search.matches(regex)) {
+			//ingreso un numero de inventario
 			resultados = inventoryService.findByInventory(Integer.parseInt(search));
 		}else {
-			Staff staff = userService.findByUserName(usuario);
+			//ingreso el titulo de la pelicula
+			Staff staff =  userService.findByUserName(usuario);
 			resultados = inventoryService.filtrarInventarioPorTiendaYTituloPelicula(staff.getStoreId(), search);
 		}
 		return resultados;
 	}
+	
+	
 }
+
+
+
+
+
+
+
+
+
+
+
+
+

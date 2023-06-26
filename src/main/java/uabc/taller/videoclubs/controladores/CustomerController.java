@@ -112,7 +112,7 @@ public class CustomerController {
         if (id == null)
             return response(false, null, "Datos invalidos");
 
-        String customer = customerService.findByIdCustomerDetalles(id);
+        String customer = customerService.findByIdCustumerDetalles(id);
         return response(customer != null, customer, customer == null ? "Registro no encontrado" : "");
     }
 
