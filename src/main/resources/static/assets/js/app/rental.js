@@ -56,9 +56,9 @@ const rentalController = () => {
                     data: null,
                     render: function(data, type, {rentalId, returnDate, }){
                      return	`<div class="btn-group" role="group">
-                            <button type="button" class="btn btn-primary consultarRenta" rentalId=${rentalId}><i class="fas fa-search"></i></button>
-    						<button type="button" class="btn btn-danger realizarDevolucion" rentalId="${rentalId}" returnDate="${returnDate}" ${returnDate && 'disabled'} ${_tooltipAttr(`${returnDate ? 'Devoluci&oacute;n ya realizada' : 'Devoluci&oacute;n'}`)}>${_icon('fa-sign-in-alt')}</button>
-                            <button target="_blank" class = "btn gray-btn exportarPDF" rentalId ="${rentalId}" href="./rental/export/reciboRenta?rentalId=${rentalId}" ${_tooltipAttr('General PDF')}>${_icon('fa-file-pdf')}</button>
+                            <button type="button" class="btn btn-primary consultarRenta accionesRow" rentalId=${rentalId}><i class="fas fa-search"></i></button>
+    						<button type="button" class="btn btn-danger realizarDevolucion accionesRow" rentalId="${rentalId}" returnDate="${returnDate}" ${returnDate && 'disabled'} ${_tooltipAttr(`${returnDate ? 'Devoluci&oacute;n ya realizada' : 'Devoluci&oacute;n'}`)}>${_icon('fa-sign-in-alt')}</button>
+                            <a target="_blank" href="./rental/export/reciboRenta?rentalId=${rentalId}" class="btn btn-secondary exportarPDF" rentalId="${rentalId}" ${_tooltipAttr('General PDF')}>${_icon('fa-file-pdf')}</a>
                         </div>`
                     }
                 },

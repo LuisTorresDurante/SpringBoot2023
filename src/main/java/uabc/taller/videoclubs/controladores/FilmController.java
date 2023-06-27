@@ -1,9 +1,6 @@
 package uabc.taller.videoclubs.controladores;
 
 import java.io.IOException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -113,21 +110,33 @@ public class FilmController {
 		return ResponseEntity.ok(resultado);
 	}
 	
-	@GetMapping("pdf/{id}")
-    @ResponseBody
-    public void exportPDFFilm(HttpServletRequest request, HttpServletResponse response, @PathVariable Integer id) throws 	DocumentException, IOException{
-    	FilmDetails film = filmService.findById(id).get();
-    	response.setContentType("application/pdf");
-    	DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
+	@GetMapping("/pdf/{id}")
+	@ResponseBody
+	public void exportPDF(HttpServletRequest request, HttpServletResponse response, @PathVariable Integer id) throws DocumentException, IOException {
+		FilmDetails film = filmService.findById(id).get();
+		response.setContentType("application/pdf");
+		
+		String headerKey = "Content-Disposition";
+    	String sbHeaderValue = "attachment; filename=pelicula.pdf";
     	
-    	String currentDateTime = dateFormatter.format(new Date());
-    	
-    	String headerKey = "Content-Disposition";
-    	String sbHeaderValue = "attachment; filename = Film_ " + film.getFilmId() + "_" + currentDateTime + 		".pdf";
     	response.setHeader(headerKey, sbHeaderValue);
-    	
-    	FilmPDFExporter exporter = new FilmPDFExporter(film);
-    	exporter.export(response);
-    			
-    }
+		
+		FilmPDFExporter export = new FilmPDFExporter(film);
+		export.export(response);
+	}
+	
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+

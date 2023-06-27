@@ -35,7 +35,7 @@ public class RentalPDFExporter {
     }
 
     public void export(HttpServletResponse response) throws DocumentException, IOException {
-        Document document = new Document(new Rectangle(216, 500), 5, 5, 10, 10);
+    	Document document = new Document(new Rectangle(216, 500), 5, 5, 10, 10);
         PdfWriter instance = PdfWriter.getInstance(document, response.getOutputStream());
 
         DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy hh:mm a");
@@ -66,51 +66,68 @@ public class RentalPDFExporter {
         document.add(pTitle);
 
         document.add(linebreak);
-        
-        Paragraph renta = new Paragraph("Renta #" + rental.getRentalId(), fontTitle );
+
+        Paragraph renta = new Paragraph("Renta #" + rental.getRentalId(), fontTitle);
         renta.setAlignment(Paragraph.ALIGN_CENTER);
         document.add(renta);
-        
-        document.add(new Paragraph("Fecha de renta: ", fontTitle));
-        document.add(new Paragraph(dateFormat.format(new Date(rental.getRentalDate().getTime())), fontBody));
-        document.add(Chunk.NEWLINE);
-        
-        document.add(new Paragraph("Pelicula rentada: ", fontTitle));
-        document.add(new Paragraph(rental.getTituloPelicula(), fontBody));
-        document.add(Chunk.NEWLINE);
-        
-        document.add(new Paragraph("Nombre del cliente: ", fontTitle));
-    	document.add(new Paragraph(rental.getCustomerId() + " " + rental.getNombreCliente(), fontBody));
-    	document.add(Chunk.NEWLINE);
-    	
 
-        
-        if(rental.getReturnDate() != null) {
-        	
-        document.add(new Paragraph("Fecha de regreso: ", fontBodyBold));
-        document.add(new Paragraph(dateFormat.format(new Date(rental.getReturnDate().getTime())), fontBody));
-        
         document.add(Chunk.NEWLINE);
-        	
-        }else {
-        	document.add(new Paragraph("Esta pelicula NO se ha devuelto!", fontBodyBold));
-        	document.add(Chunk.NEWLINE);
+
+        document.add(new Paragraph("FECHA DE RENTA:", fontBodyBold));
+        document.add(new Paragraph(dateFormat.format(new Date(rental.getRentalDate().getTime())), fontBody));
+
+        document.add(Chunk.NEWLINE);
+
+        document.add(new Paragraph("CLIENTE:", fontBodyBold));
+        document.add(new Paragraph(String.format("%d - %s", rental.getCustomerId(), Arrays.stream(rental.getNombreCliente().toLowerCase().split(" "))
+                .map(nombre -> nombre.substring(0, 1).toUpperCase() + nombre.substring(1)).collect(Collectors.joining(" "))), fontBody));
+
+        document.add(Chunk.NEWLINE);
+        document.add(new Paragraph("PELÍCULA:", fontBodyBold));
+        document.add(new Paragraph(String.format("%s (#%d)", rental.getTituloPelicula(), rental.getInventoryId()), fontBody));
+
+        document.add(Chunk.NEWLINE);
+
+        if (rental.getReturnDate() != null) {
+            document.add(new Paragraph("FECHA DE REGRESO:", fontBodyBold));
+            document.add(new Paragraph(dateFormat.format(new Date(rental.getReturnDate().getTime())), fontBody));
+            document.add(Chunk.NEWLINE);
+        } else {
+            document.add(Chunk.NEWLINE);
+            document.add(Chunk.NEWLINE);
+            document.add(Chunk.NEWLINE);
         }
-        
+
+        fontBodyBold.setSize(10);
+        fontBody.setSize(10);
+
         document.add(Chunk.NEWLINE);
-        
-        Paragraph pReturnDateLabel = new Paragraph("Ultima actualizacion: ", fontBodyBold);
-        pReturnDateLabel.setAlignment(Paragraph.ALIGN_CENTER);
-        document.add(pReturnDateLabel);
-        
-        Paragraph pReturnDate = new Paragraph(dateFormat.format(rental.getLastUpdate().getTime()), fontBody);
-        pReturnDate.setAlignment(Paragraph.ALIGN_CENTER);
-        document.add(pReturnDate);
-        
-        
-        document.add(Chunk.NEWLINE);
+
+        Paragraph pLastUpdateLabel = new Paragraph("ÚLTIMA ACTUALIZACIÓN:", fontBodyBold);
+        pLastUpdateLabel.setAlignment(Paragraph.ALIGN_CENTER);
+        document.add(pLastUpdateLabel);
+
+        Paragraph pLastUpdate = new Paragraph(dateFormat.format(new Date(rental.getLastUpdate().getTime())), fontBody);
+        pLastUpdate.setAlignment(Paragraph.ALIGN_CENTER);
+        document.add(pLastUpdate);
+
+        QRCode code = new QRCode();
+        Optional<Image> image = code.generateBarcode(String.format("R%dF%dC%d", rental.getRentalId(), rental.getInventoryId(), rental.getCustomerId()), instance.getDirectContent());
+        if (image.isPresent()) {
+            image.get().scaleAbsolute(156, 41);
+            image.get().setAbsolutePosition(30, document.bottom());
+            document.add(image.get());
+        }
 
         document.close();
-
     }
 }
+
+
+
+
+
+
+
+
+

@@ -147,23 +147,30 @@ public class RentalController {
     
     @GetMapping("export/reciboRenta")
     @ResponseBody
-    public void exportRentalPDF(HttpServletRequest request, HttpServletResponse response, @RequestParam Integer rentalId) throws 	DocumentException, IOException{
+    public void exportPDF(HttpServletRequest request, HttpServletResponse response, @RequestParam Integer rentalId) 
+    		throws DocumentException, IOException {
     	RentalDTO rental = rentalService.findByRentalId(rentalId);
     	response.setContentType("application/pdf");
     	DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
-    	
     	String currentDateTime = dateFormatter.format(new Date());
     	
     	String headerKey = "Content-Disposition";
-    	String sbHeaderValue = "attachment; filename = receipt_rental_ " + rental.getRentalId() + "_" + currentDateTime + 		".pdf";
+    	String sbHeaderValue = "attachment; filename=receipt_rental_" + 
+    	rental.getRentalId() + "_" + currentDateTime + ".pdf";
+    	
     	response.setHeader(headerKey, sbHeaderValue);
     	
     	RentalPDFExporter exporter = new RentalPDFExporter(rental);
     	exporter.export(response);
-    			
     }
     
     
-    
-    
 }
+
+
+
+
+
+
+
+
