@@ -127,7 +127,7 @@ $(document).ready(function () {
 		$(this).prop("disabled", true)
 		const action = $(this).attr("action")
 		const rentalId = $(this).attr("rentalId")
-		accionesTabla[action]?.(rentalId, $(this))
+//		accionesTabla[action]?.(rentalId, $(this))
 	})
 	$("body").on("click", "#guardarDevolucionMasiva", async function(e){
 		const _btnSuccess = $(this) 
@@ -172,7 +172,7 @@ const rentalRepository = ()=>{
 		return await _postRequestReturn(`registrar-devolucion`, {rentalId, returnDate, multaGenerada, customerId})
 	}
 	const registrarMasivo = async (rental, returnDate, multaGenerada, customerId) => {
-		return await _postRequestReturn(`registrar-devolucion-masivo`, {rental, returnDate, multaGenerada, customerId})
+		return await _postRequestReturn(`registrar-devolucion-seleccionadas`, {rental, returnDate, multaGenerada, customerId})
 	}
 	
 	const _postRequestReturn = async (url, data) => {

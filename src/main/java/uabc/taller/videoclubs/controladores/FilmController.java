@@ -112,7 +112,8 @@ public class FilmController {
 	
 	@GetMapping("/pdf/{id}")
 	@ResponseBody
-	public void exportPDF(HttpServletRequest request, HttpServletResponse response, @PathVariable Integer id) throws DocumentException, IOException {
+	public void exportPDF(HttpServletRequest request, HttpServletResponse response, 
+			@PathVariable Integer id) throws DocumentException, IOException {
 		FilmDetails film = filmService.findById(id).get();
 		response.setContentType("application/pdf");
 		

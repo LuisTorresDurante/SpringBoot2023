@@ -11,8 +11,8 @@ public interface IReturnService {
 	public Integer obtenerDuracionRentaParaDevolver(Integer rentaId);
 
 	List<RentalDTO> obtenerPeliculasDevueltas(Integer parametro);
-
-	public String registrarDevolucion(List<RentalDTO> rentals, String returnDate, String multaGenerada,
+	
+	public String registrarDevolucion(List<RentalDTO> rentals,  String returnDate, String multaGenerada, 
 			Integer customerId);
 
 }

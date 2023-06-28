@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import uabc.taller.videoclubs.dto.RentalDTO;
 import uabc.taller.videoclubs.servicios.IReturnService;
+import uabc.taller.videoclubs.servicios.RentalService;
 
 @Controller
 @RequestMapping(value= {"/return", "return"})
@@ -57,7 +58,7 @@ public class ReturnController {
 		return returnService.obtenerDuracionRentaParaDevolver(rentalId);
 	}
 	
-	@PostMapping(value={"/registrar-devolucion-masivo","registrar-devolucion-masivo"})
+	@PostMapping(value={"/registrar-devolucion-seleccionadas","registrar-devolucion-seleccionadas"})
 	@ResponseBody
 	public HashMap<String, Object> registrarDevolucionesSeleccionadas(HttpServletRequest request){
 		String msg = "";
@@ -84,6 +85,30 @@ public class ReturnController {
 		return response(resultado, null, msg);
 	}
 	
+	@PostMapping(value={"/registrar-devolucion","registrar-devolucion"})
+	@ResponseBody
+	public HashMap<String, Object> registrarDevolucion(HttpServletRequest request){
+		String msg = "";
+		boolean resultado = false;
+		try {
+			Integer rentalid = Integer.parseInt(request.getParameter("rentalId"));
+			List<RentalDTO> rentals = new ArrayList<>();
+			rentals.add(RentalDTO.builder().rentalId(rentalid).build());
+			
+			String returnDate = request.getParameter("returnDate");
+			String multaGenerada = request.getParameter("multaGenerada");
+			Integer customerId = Integer.parseInt(request.getParameter("customerId"));
+			String resultadoRegistro = returnService.registrarDevolucion(rentals, returnDate, multaGenerada,
+					customerId);
+			resultado = resultadoRegistro == "OK";
+			msg = resultadoRegistro == "OK" ? "Devoluci&oacute;n registrada" : "Error al procesar los datos";
+			
+		} catch (Exception e) {
+			msg = "Los datos son invalidos";
+		}
+
+		return response(resultado, null, msg);
+	}
 }
 
 

@@ -1,5 +1,8 @@
 package uabc.taller.videoclubs.servicios;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -7,14 +10,21 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import uabc.taller.videoclubs.dto.RentalDTO;
+import uabc.taller.videoclubs.entidades.Customer;
 import uabc.taller.videoclubs.entidades.Rental;
 import uabc.taller.videoclubs.repositorios.RentalRepository;
+import uabc.taller.videoclubs.repositorios.TicketRepository;
+import uabc.taller.videoclubs.entidades.Ticket;
 
 @Service
 public class ReturnService implements IReturnService {
 	
 	@Autowired
 	private RentalRepository rentalRepo;
+	@Autowired
+	private TicketRepository ticketRepo;
+	@Autowired
+	private CustomerService customerService;
 	
 	private RentalDTO toRentalDTO(Rental r) {
 		return RentalDTO.builder()
@@ -50,5 +60,30 @@ public class ReturnService implements IReturnService {
 	@Override
 	public Integer obtenerDuracionRentaParaDevolver(Integer rentaId) {
 		return rentalRepo.obtenerDuracionRentaParaDevolver(rentaId);
+	}
+	
+	@Override
+	public String registrarDevolucion(List<RentalDTO> rentals,  String returnDate, String multaGenerada, 
+			Integer customerId) {
+		String resultado = "OK";
+		try {
+			DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+			for(RentalDTO renta : rentals) {
+				rentalRepo.actualizarFechaEntrega(renta.getRentalId(), dateFormatter.parse(returnDate));
+				if(multaGenerada!=null && !multaGenerada.equals("0.00")) {
+					Double multa = Double.parseDouble(multaGenerada);
+					multa = multa>999 ? 999 : multa;
+					Ticket ticket = new Ticket(new Date(), new Customer(customerId), 
+							new Rental(renta.getRentalId()), multa
+							, true);
+					ticketRepo.save(ticket);
+					customerService.actualizarEstadoCliente(false, customerId);
+				}
+			}
+		} catch (Exception e) {
+			resultado = "ERROR";
+		}
+		
+		return resultado;
 	}
 }
