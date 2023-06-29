@@ -1,6 +1,7 @@
 package uabc.taller.videoclubs.entidades;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -11,6 +12,7 @@ import javax.persistence.*;
 @AllArgsConstructor
 @Data
 @Entity
+@Builder
 @Table(name = "country")
 public class Country {
     //Declaracion de variables
@@ -20,7 +22,7 @@ public class Country {
     private Integer countryId;
 
     @Column(name = "country")
-    private String name;
+    private String countryName;
 
     @DateTimeFormat(pattern = "MM/dd/yyyy")
     @Column(name = "last_update")

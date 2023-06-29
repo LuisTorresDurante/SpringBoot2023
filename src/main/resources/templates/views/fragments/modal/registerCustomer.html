@@ -61,7 +61,7 @@
                 					<select class="form-control" id="selectCountry" name="selectCountry">
                 						<option value="-1">Selecciona una opción</option>
                 						<option th:each="country : ${countries}"
-                								th:text="${country.name}"
+                								th:text="${country.countryName}"
                 								th:value="${country.countryId}">
                 						</option>
                 					</select>

@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="ISO-8859-1">
+    <title>Pa&iacute;ses</title>
+    <meta charset="UTF-8">
+    <meta content="IE=edge" http-equiv="X-UA-Compatible">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <link rel="stylesheet" th:href="@{../assets/css/buscador.css}"/>
+    <div th:replace="layout/layout :: estilos"></div>
+</head>
+<body>
+<div class="box">
+    <div th:replace="layout/layout :: header"></div>
+
+    <div class="uabc-content" style="padding-right: 3%; padding-left: 3%;">
+        <div class="row">
+            <div class="col-sm-12">
+                <h2 class="text-muted">Paises</h2>
+            </div>
+            <div class="col-sm-12 mb-3 d-flex">
+                <div class="btn-group" role="group">
+                    <button class="btn green-btn" id="agregarPais">
+                        <i class="fas fa-plus fa-fw"></i> Registrar
+                    </button>
+                </div>
+            </div>
+            <div class="col-sm-12">
+                <div class="card mw-100  mx-0">
+                    <div class="card-body">
+                        <table class="table table-hover table-bordered uabc-tables" id="tableCountries">
+                            <thead>
+                            <tr style="background-color: #239B56;">
+                                <th class="text-white" scope="col">Id Pais</th>
+                                <th class="text-white" scope="col">Nombre del pais</th>
+                                <th class="text-white" scope="col">Ultima actualizaci&oacute;n</th>
+                                <th class="text-white text-center" style="width: 10% !important;">Acciones</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        
+
+        <nav aria-label="Pagination">
+            <div class="pagination justify-content-center dataTables_wrapper" id="paginationContainer">
+                <!-- Links de paginaci�n se insertar�n din�micamente aqu� -->
+            </div>
+        </nav>
+
+    </div>
+
+    
+
+</div>
+    
+<div class="modal fade" id="modal-registar-pais" tabindex="-1" aria-labelledby="modal-registar-pais" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content ">
+            <div class="modal-header">
+                <span class="modal-title" id="exampleModalLabel">Registrar Pais</span>
+                <button type="button" class="modal-x" data-dismiss="modal" aria-label="Close">&times;</button>
+            </div>
+            <div class="modal-body">                             
+                <div class="form-row">
+                    <div class="container">
+                        <div class="form-group" id="countryForm">
+                            <label class="form-txt" for="customerName">Nombre del pais</label>
+                            <input class="form-control" type="text" id="countryName" >
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn gray-btn" data-dismiss="modal" id>Cerrar</button>
+                <button type="button" class="btn green-btn" id="agregarPais">Registrar Pais</button>
+            </div>
+        </div>
+    </div>
+</div>
+    
+    <div th:replace="layout/layout :: footer"></div>
+    <div th:replace="layout/layout :: scripts"></div>
+    <script th:src="@{assets/js/landing.js}"></script>
+    <script th:src="@{assets/js/app/countries.js}"></script>
+</body>
+</html>
