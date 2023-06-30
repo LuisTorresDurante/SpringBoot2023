@@ -6,6 +6,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import java.sql.Timestamp;
+
 import javax.persistence.*;
 
 @NoArgsConstructor
@@ -27,5 +29,12 @@ public class Country {
     @DateTimeFormat(pattern = "MM/dd/yyyy")
     @Column(name = "last_update")
     private java.sql.Timestamp lastUpdate;
+    
+public void setLastUpdate(Timestamp timestamp) {
+		
+		this.lastUpdate = timestamp;
+	}
+
+	
 
 }
